@@ -5,7 +5,7 @@ import App from './App.tsx'
 import Home from './components/Home.tsx'
 import Customers from './components/Customers.tsx'
 import Trainings from './components/Trainings.tsx'
-// import './index.css'
+import './index.css'
 
 // The router defines the routes for the application (for navigation)
 const router = createBrowserRouter([

@@ -1,1 +1,1 @@
-import type ·{ TrainingForm } from "./types";
+import type { TrainingForm } from "./types";

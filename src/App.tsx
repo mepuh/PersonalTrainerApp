@@ -5,13 +5,14 @@ import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import { NavLink, Outlet } from 'react-router'
 import { Box } from "@mui/material"
-// import './App.css'
+import './App.css'
 
 function App() {
 
   return (
     <>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
+        <CssBaseline />
         <AppBar position="static" sx={{ marginBottom: 2 }}>
           <Toolbar>
             <Typography variant="h6">PersonalTrainer</Typography>
@@ -24,7 +25,6 @@ function App() {
             </nav>
           </Toolbar>
         </AppBar>
-        <CssBaseline />
         <Outlet />
       </Container>
     </>
