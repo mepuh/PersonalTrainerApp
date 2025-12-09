@@ -5,11 +5,15 @@ import { getCustomer } from "../customerApi";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { format } from "date-fns";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
 
 function Trainings() {
 
     const [trainings, setTrainings] = useState<Training[]>([]);
     const [customers, setCustomers] = useState<{ [key: string]: string }>({});
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     // Updated fetchTrainings function to get customer names in addition to trainings
     const fetchTrainings = () => {
@@ -71,15 +75,50 @@ function Trainings() {
         }
     ];
 
+    // SEARCH FUNCTIONALITY
+    // Filter trainings based on search term - able to search any field
+    const filteredTrainings = trainings.filter(training => {
+        const customerName = customers[training._links.customer.href] || "";
+        const formattedDate = format(new Date(training.date), 'dd.MM.yyyy HH:mm');
+        
+        return training.activity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            formattedDate.includes(searchTerm) ||
+            training.duration.toString().includes(searchTerm);
+    });
+
     return (
-        <div style={{ height: 600, width: '90%', margin: '0 auto', marginTop: '50px' }}>
-            <DataGrid
-                rows={trainings}
-                columns={columns}
-                getRowId={row => row._links.self.href}
-                autoPageSize
-                rowSelection={false}
-            />
+        <div>
+            {/* Search input field (search bar) */}
+            <div style={{ marginBottom: '20px', width: '90%', maxWidth: '400px', margin: '20px auto' }}>
+                <TextField
+                    label="Search trainings"
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    placeholder="Search by any field..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </div>
+
+            {/* Trainings data grid */}
+            <div style={{ height: 600, width: '90%', margin: '0 auto', marginTop: '20px' }}>
+                <DataGrid
+                    rows={filteredTrainings}
+                    columns={columns}
+                    getRowId={row => row._links.self.href}
+                    autoPageSize
+                    rowSelection={false}
+                />
+            </div>
         </div>
     );
 }
