@@ -34,8 +34,7 @@ function Customers() {
                 rows={customers}
                 columns={columns}
                 getRowId={row => row._links.self.href}
-                pageSizeOptions={[5, 10, 25, 50]}
-                initialState={{ pagination: { paginationModel: { pageSize: 5, page: 0 } } }}
+                autoPageSize
                 rowSelection={false}
             />
         </div>
