@@ -6,6 +6,10 @@ import type { GridColDef } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import GroupIcon from "@mui/icons-material/Group";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 function Customers() {
 
@@ -22,6 +26,7 @@ function Customers() {
         fetchCustomers();
     }, [])
 
+    // Define columns for the DataGrid
     const columns: GridColDef[] = [
         { field: 'firstname', headerName: 'First Name', minWidth: 150, flex: 1 },
         { field: 'lastname', headerName: 'Last Name', minWidth: 150, flex: 1 },
@@ -45,37 +50,49 @@ function Customers() {
     );
 
     return (
-        <div>
-            {/* Search input field (search bar) */}
-            <div style={{ marginBottom: '20px', width: '90%', maxWidth: '400px', margin: '20px auto' }}>
-                <TextField
-                    label="Search customers"
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    placeholder="Search by any field..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </div>
+        <div style={{ width: '90%', margin: '20px auto' }}>
+            <Card>
+                <CardContent>
+                    {/* Title and search bar side-by-side */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '20px', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <GroupIcon sx={{ color: '#667eea', fontSize: 28 }} />
+                            <h3 style={{ margin: 0, color: '#667eea', fontWeight: 'bold' }}>Customers</h3>
+                        </Box>
+                        {/* Search bar for customers */}
+                        <TextField
+                            label="Search customers"
+                            variant="outlined"
+                            size="small"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            sx={{ width: '350px' }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Box>
 
-            {/* Customers data grid */}
-            <div style={{ height: 600, width: '90%', margin: '0 auto', marginTop: '20px' }}>
-                <DataGrid
-                    rows={filteredCustomers}
-                    columns={columns}
-                    getRowId={row => row._links.self.href}
-                    autoPageSize
-                    rowSelection={false}
-                />
-            </div>
+                    {/* Customers data grid */}
+                    <div style={{ height: 600, width: '100%' }}>
+                        <DataGrid
+                            rows={filteredCustomers}
+                            columns={columns}
+                            getRowId={row => row._links.self.href}
+                            autoPageSize
+                            rowSelection={false}
+                            sx={{
+                                border: 'none',
+                            }}
+                        />
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }

@@ -9,7 +9,7 @@ function Home() {
       alignItems="center"
       minHeight="70vh"
     >
-      <Paper elevation={4} sx={{ p: 5, maxWidth: 600, textAlign: "center" }}>
+      <Paper elevation={4} sx={{ p: 5, maxWidth: 700, textAlign: "center" }}>
         <Typography variant="h4" sx ={{ mb: 2 }}>
           Personal Trainer Admin Dashboard
         </Typography>

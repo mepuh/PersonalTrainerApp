@@ -8,6 +8,10 @@ import { format } from "date-fns";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 function Trainings() {
 
@@ -53,6 +57,7 @@ function Trainings() {
         fetchTrainings();
     }, [])
 
+    // Define columns for the DataGrid
     const columns: GridColDef[] = [
         { field: 'activity', headerName: 'Activity', minWidth: 200, flex: 1 },
         {
@@ -88,37 +93,49 @@ function Trainings() {
     });
 
     return (
-        <div>
-            {/* Search input field (search bar) */}
-            <div style={{ marginBottom: '20px', width: '90%', maxWidth: '400px', margin: '20px auto' }}>
-                <TextField
-                    label="Search trainings"
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    placeholder="Search by any field..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </div>
+        <div style={{ width: '90%', margin: '20px auto' }}>
+            <Card>
+                <CardContent>
+                    {/* Title and search bar side-by-side */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '20px', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <FitnessCenterIcon sx={{ color: '#667eea', fontSize: 28 }} />
+                            <h3 style={{ margin: 0, color: '#667eea', fontWeight: 'bold' }}>Trainings</h3>
+                        </Box>
+                        {/* Search bar for trainings */}
+                        <TextField
+                            label="Search trainings"
+                            variant="outlined"
+                            size="small"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            sx={{ width: '350px' }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Box>
 
-            {/* Trainings data grid */}
-            <div style={{ height: 600, width: '90%', margin: '0 auto', marginTop: '20px' }}>
-                <DataGrid
-                    rows={filteredTrainings}
-                    columns={columns}
-                    getRowId={row => row._links.self.href}
-                    autoPageSize
-                    rowSelection={false}
-                />
-            </div>
+                    {/* Trainings data grid */}
+                    <div style={{ height: 600, width: '100%' }}>
+                        <DataGrid
+                            rows={filteredTrainings}
+                            columns={columns}
+                            getRowId={row => row._links.self.href}
+                            autoPageSize
+                            rowSelection={false}
+                            sx={{
+                                border: 'none',
+                            }}
+                        />
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }
