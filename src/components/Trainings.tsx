@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react"
 import type { Training } from "../types"
-import { getTrainings } from "../trainingApi";
+import { deleteTraining, getTrainings } from "../trainingApi";
 import { getCustomer } from "../customerApi";
-import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import type { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { format } from "date-fns";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -25,15 +26,15 @@ function Trainings() {
             .then(data => {
                 // 1. Save trainings to state
                 setTrainings(data._embedded.trainings);
-                
+
                 // 2. Get unique customer URLs (avoid fetching same customer multiple times)
                 const uniqueCustomerUrls = [...new Set(
                     data._embedded.trainings.map((t: Training) => t._links.customer.href)
                 )] as string[];
-                
+
                 // 3. Fetch each customer and build a map of URLs to Names
                 const customerMap: { [key: string]: string } = {};
-                
+
                 // Loop through each unique customer URL
                 uniqueCustomerUrls.forEach(url => {
                     getCustomer(url)
@@ -57,8 +58,28 @@ function Trainings() {
         fetchTrainings();
     }, [])
 
+    // Handle deletion of a training
+    const handleDelete = (url: string) => {
+        if (window.confirm("Are you sure you want to delete this training activity?")) {
+            deleteTraining(url)
+                .then(() => fetchTrainings())
+                .catch(err => console.error(err));
+        }
+    }
+
     // Define columns for the DataGrid
     const columns: GridColDef[] = [
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: '',
+            getActions: (params: GridRowParams) => [
+                <GridActionsCellItem
+                    icon={<DeleteIcon />}
+                    onClick={() => handleDelete(params.row._links.self.href)}
+                    label="Delete" />,
+            ],
+        },
         { field: 'activity', headerName: 'Activity', minWidth: 200, flex: 1 },
         {
             field: 'date',
@@ -69,7 +90,7 @@ function Trainings() {
             renderCell: (params) => format(new Date(params.value), 'dd.MM.yyyy HH:mm')
         },
         { field: 'duration', headerName: 'Duration (min)', minWidth: 150, flex: 1 },
-        { 
+        {
             field: 'customer',
             headerName: 'Customer',
             minWidth: 200,
@@ -85,7 +106,7 @@ function Trainings() {
     const filteredTrainings = trainings.filter(training => {
         const customerName = customers[training._links.customer.href] || "";
         const formattedDate = format(new Date(training.date), 'dd.MM.yyyy HH:mm');
-        
+
         return training.activity.toLowerCase().includes(searchTerm.toLowerCase()) ||
             customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             formattedDate.includes(searchTerm) ||
