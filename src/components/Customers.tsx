@@ -11,6 +11,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -62,12 +64,12 @@ function Customers() {
     const handleSave = () => {
         if (editingRowId && editingData) {
             // Validate all fields are filled
-            if (!editingData.firstname || !editingData.lastname || !editingData.streetaddress || 
+            if (!editingData.firstname || !editingData.lastname || !editingData.streetaddress ||
                 !editingData.postcode || !editingData.city || !editingData.email || !editingData.phone) {
                 alert("All fields must be filled!");
                 return;
             }
-            
+
             // Update customer and refresh list
             updateCustomer(editingRowId, editingData)
                 .then(() => {
@@ -92,6 +94,50 @@ function Customers() {
         }
     }
 
+    // Export customers to CSV file
+    const exportToCSV = () => {
+        // Define CSV headers (only customer data fields, no actions)
+        const headers = ['First Name', 'Last Name', 'Street Address', 'Postcode', 'City', 'Email', 'Phone'];
+
+        // Convert customers data to CSV rows
+        const csvRows = customers.map(customer => [
+            customer.firstname,
+            customer.lastname,
+            customer.streetaddress,
+            customer.postcode,
+            customer.city,
+            customer.email,
+            customer.phone
+        ]);
+
+        // Combine headers and rows
+        const csvContent = [
+            headers.join(','), // Header row
+            ...csvRows.map(row => row.join(',')) // Data rows
+        ].join('\n');
+
+        // Create a Blob from the CSV content (Binary Large Object)
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        // Create a download link and trigger download
+        // Step 1: Create an invisible <a> element
+        const link = document.createElement('a');
+        // Step 2: Create a temporary URL that points to the Blob data
+        const url = URL.createObjectURL(blob);
+        // Step 3: Set the link's destination to the temporary URL
+        link.setAttribute('href', url);
+        // Step 4: Set the filename for the downloaded file
+        link.setAttribute('download', 'customers.csv');
+        // Step 5: Hide the link (user won't see it)
+        link.style.visibility = 'hidden';
+        // Step 6: Add the link to the page (needed for it to work)
+        document.body.appendChild(link);
+        // Step 7: Programmatically click the link to trigger download
+        link.click();
+        // Step 8: Remove the link from the page (cleanup)
+        document.body.removeChild(link);
+    }
+
     // Define columns for the DataGrid
     const columns: GridColDef[] = [
         {
@@ -101,7 +147,7 @@ function Customers() {
             minWidth: 130,
             getActions: (params: GridRowParams) => {
                 const isEditing = editingRowId === params.row._links.self.href;
-                
+
                 if (isEditing) {
                     return [
                         <Tooltip key="save" title="Save">
@@ -118,7 +164,7 @@ function Customers() {
                         </Tooltip>,
                     ];
                 }
-                
+
                 return [
                     <Tooltip key="edit" title="Edit">
                         <GridActionsCellItem
@@ -132,17 +178,17 @@ function Customers() {
                             onClick={() => handleDelete(params.row._links.self.href)}
                             label="Delete" />
                     </Tooltip>,
-                    <AddTraining 
+                    <AddTraining
                         customerUrl={params.row._links.self.href}
                         customerName={`${params.row.firstname} ${params.row.lastname}`}
                     />,
                 ];
             },
         },
-        { 
-            field: 'firstname', 
-            headerName: 'First Name', 
-            minWidth: 150, 
+        {
+            field: 'firstname',
+            headerName: 'First Name',
+            minWidth: 150,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -161,10 +207,10 @@ function Customers() {
                 return params.value;
             }
         },
-        { 
-            field: 'lastname', 
-            headerName: 'Last Name', 
-            minWidth: 150, 
+        {
+            field: 'lastname',
+            headerName: 'Last Name',
+            minWidth: 150,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -183,10 +229,10 @@ function Customers() {
                 return params.value;
             }
         },
-        { 
-            field: 'streetaddress', 
-            headerName: 'Address', 
-            minWidth: 200, 
+        {
+            field: 'streetaddress',
+            headerName: 'Address',
+            minWidth: 200,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -205,10 +251,10 @@ function Customers() {
                 return params.value;
             }
         },
-        { 
-            field: 'postcode', 
-            headerName: 'Post Code', 
-            minWidth: 100, 
+        {
+            field: 'postcode',
+            headerName: 'Post Code',
+            minWidth: 100,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -227,10 +273,10 @@ function Customers() {
                 return params.value;
             }
         },
-        { 
-            field: 'city', 
-            headerName: 'City', 
-            minWidth: 150, 
+        {
+            field: 'city',
+            headerName: 'City',
+            minWidth: 150,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -249,10 +295,10 @@ function Customers() {
                 return params.value;
             }
         },
-        { 
-            field: 'email', 
-            headerName: 'Email', 
-            minWidth: 200, 
+        {
+            field: 'email',
+            headerName: 'Email',
+            minWidth: 200,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -271,10 +317,10 @@ function Customers() {
                 return params.value;
             }
         },
-        { 
-            field: 'phone', 
-            headerName: 'Phone', 
-            minWidth: 120, 
+        {
+            field: 'phone',
+            headerName: 'Phone',
+            minWidth: 120,
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
@@ -371,6 +417,20 @@ function Customers() {
                             }}
                         />
                     </div>
+
+                    {/* Export to CSV button */}
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                        <Tooltip title="Export to CSV">
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                startIcon={<DownloadIcon />}
+                                onClick={exportToCSV}
+                            >
+                                Export data
+                            </Button>
+                        </Tooltip>
+                    </Box>
                 </CardContent>
             </Card>
         </div>
