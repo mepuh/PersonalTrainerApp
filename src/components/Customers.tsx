@@ -11,6 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import AddCustomer from "./AddCustomer";
 
 function Customers() {
 
@@ -80,23 +81,27 @@ function Customers() {
                             <GroupIcon sx={{ color: '#667eea', fontSize: 28 }} />
                             <h3 style={{ margin: 0, color: '#667eea', fontWeight: 'bold' }}>Customers</h3>
                         </Box>
-                        {/* Search bar for customers */}
-                        <TextField
-                            label="Search customers"
-                            variant="outlined"
-                            size="small"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            sx={{ width: '350px' }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            {/* Component for adding a new customer (button) */}
+                            <AddCustomer fetchCustomers={fetchCustomers} />
+                            {/* Search bar for customers */}
+                            <TextField
+                                label="Search customers"
+                                variant="outlined"
+                                size="small"
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                sx={{ width: '350px' }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Box>
                     </Box>
 
                     {/* Customers data grid */}

@@ -1,4 +1,4 @@
-import type { Customer } from "./types";
+import type { Customer, CustomerForm } from "./types";
 
 // Fetch customers from the API
 export function getCustomers() {
@@ -16,7 +16,7 @@ export function getCustomer(url: string) {
     return fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error("Error when fetching customer");
+                throw new Error("Error when fetching customer" + response.statusText);
             }
             return response.json() as Promise<Customer>;
         })
@@ -29,5 +29,21 @@ export function deleteCustomer(url: string) {
             if (!response.ok) {
                 throw new Error("Error when deleting customer: " + response.statusText);
             }
+            return response.json();
         })
+}
+
+// Save a new customer to the API
+export function saveCustomer(customer: CustomerForm) {
+    return fetch(import.meta.env.VITE_API_URL + '/customers', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(customer)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error when saving customer: " + response.statusText);
+        }
+        return response.json();
+    })
 }
