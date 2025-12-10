@@ -47,3 +47,18 @@ export function saveCustomer(customer: CustomerForm) {
         return response.json();
     })
 }
+
+// Update/edit an existing customer by its URL
+export function updateCustomer(url: string, customer: CustomerForm) {
+    return fetch(url, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(customer)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error when updating customer: " + response.statusText);
+        }
+        return response.json();
+    })
+}
