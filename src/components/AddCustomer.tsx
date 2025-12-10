@@ -70,6 +70,7 @@ export default function AddCustomer({ fetchCustomers }: AddCustomerProps) {
         // Saves customer and refreshes list
         saveCustomer(customer)
             .then(() => {
+                alert(`Customer ${customer.firstname} ${customer.lastname} added successfully!`);
                 fetchCustomers();
                 handleClose();
             })

@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import AddCustomer from "./AddCustomer";
+import AddTraining from "./AddTraining";
 
 function Customers() {
 
@@ -96,6 +97,7 @@ function Customers() {
             field: 'actions',
             type: 'actions',
             headerName: '',
+            minWidth: 130,
             getActions: (params: GridRowParams) => {
                 const isEditing = editingRowId === params.row._links.self.href;
                 
@@ -121,6 +123,10 @@ function Customers() {
                         icon={<DeleteIcon />}
                         onClick={() => handleDelete(params.row._links.self.href)}
                         label="Delete" />,
+                    <AddTraining 
+                        customerUrl={params.row._links.self.href}
+                        customerName={`${params.row.firstname} ${params.row.lastname}`}
+                    />,
                 ];
             },
         },
@@ -259,7 +265,7 @@ function Customers() {
         { 
             field: 'phone', 
             headerName: 'Phone', 
-            minWidth: 150, 
+            minWidth: 120, 
             flex: 1,
             renderCell: (params) => {
                 if (editingRowId === params.row._links.self.href) {
