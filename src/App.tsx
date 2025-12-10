@@ -49,6 +49,14 @@ function App() {
                 borderBottom: isActive ? '2px solid #fff' : 'none',
                 padding: '8px 16px',
               })}>TRAININGS</NavLink>
+              <NavLink to="/calendar" style={({ isActive }) => ({
+                fontSize: '0.95rem',
+                textDecoration: 'none',
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.8)',
+                fontWeight: isActive ? 600 : 500,
+                borderBottom: isActive ? '2px solid #fff' : 'none',
+                padding: '8px 16px',
+              })}>CALENDAR</NavLink>
             </nav>
           </Toolbar>
         </AppBar>
