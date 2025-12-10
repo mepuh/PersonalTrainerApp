@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import Tooltip from '@mui/material/Tooltip';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -75,9 +76,11 @@ export default function AddTraining({ customerUrl, customerName }: AddTrainingPr
     return (
         <>
             {/* Button to open the Add Training dialog */}
-            <IconButton onClick={handleClickOpen} color="success" size="small">
-                <FitnessCenterIcon fontSize="small" />
-            </IconButton>
+            <Tooltip title="Add Training">
+                <IconButton onClick={handleClickOpen} color="success" size="small">
+                    <FitnessCenterIcon fontSize="small" />
+                </IconButton>
+            </Tooltip>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add Training for {customerName}</DialogTitle>
                 <DialogContent>

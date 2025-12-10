@@ -6,6 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Tooltip from '@mui/material/Tooltip';
 import type { CustomerForm } from '../types';
 import { saveCustomer } from '../customerApi';
 import PersonAddRounded from '@mui/icons-material/PersonAddRounded';
@@ -80,9 +81,11 @@ export default function AddCustomer({ fetchCustomers }: AddCustomerProps) {
     return (
         <>
             {/* Button to open the "Add Customer" dialog */}
-            <IconButton onClick={handleClickOpen} sx={{ fontSize: 30, color: '#764ba2' }}>
-                <PersonAddRounded sx={{ fontSize: 30 }} />
-            </IconButton>
+            <Tooltip title="Add Customer">
+                <IconButton onClick={handleClickOpen} sx={{ fontSize: 30, color: '#764ba2' }}>
+                    <PersonAddRounded sx={{ fontSize: 30 }} />
+                </IconButton>
+            </Tooltip>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add new customer!</DialogTitle>
                 <DialogContent>

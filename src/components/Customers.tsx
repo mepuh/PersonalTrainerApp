@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Tooltip from "@mui/material/Tooltip";
 import AddCustomer from "./AddCustomer";
 import AddTraining from "./AddTraining";
 
@@ -103,26 +104,34 @@ function Customers() {
                 
                 if (isEditing) {
                     return [
-                        <GridActionsCellItem
-                            icon={<CheckIcon />}
-                            onClick={handleSave}
-                            label="Save" />,
-                        <GridActionsCellItem
-                            icon={<CloseIcon />}
-                            onClick={handleCancel}
-                            label="Cancel" />,
+                        <Tooltip key="save" title="Save">
+                            <GridActionsCellItem
+                                icon={<CheckIcon />}
+                                onClick={handleSave}
+                                label="Save" />
+                        </Tooltip>,
+                        <Tooltip key="cancel" title="Cancel">
+                            <GridActionsCellItem
+                                icon={<CloseIcon />}
+                                onClick={handleCancel}
+                                label="Cancel" />
+                        </Tooltip>,
                     ];
                 }
                 
                 return [
-                    <GridActionsCellItem
-                        icon={<EditIcon />}
-                        onClick={() => handleEdit(params.row)}
-                        label="Edit" />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        onClick={() => handleDelete(params.row._links.self.href)}
-                        label="Delete" />,
+                    <Tooltip key="edit" title="Edit">
+                        <GridActionsCellItem
+                            icon={<EditIcon />}
+                            onClick={() => handleEdit(params.row)}
+                            label="Edit" />
+                    </Tooltip>,
+                    <Tooltip key="delete" title="Delete">
+                        <GridActionsCellItem
+                            icon={<DeleteIcon />}
+                            onClick={() => handleDelete(params.row._links.self.href)}
+                            label="Delete" />
+                    </Tooltip>,
                     <AddTraining 
                         customerUrl={params.row._links.self.href}
                         customerName={`${params.row.firstname} ${params.row.lastname}`}
@@ -310,7 +319,11 @@ function Customers() {
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             {/* Component for adding a new customer (button) */}
-                            <AddCustomer fetchCustomers={fetchCustomers} />
+                            <Tooltip title="Add Customer">
+                                <div>
+                                    <AddCustomer fetchCustomers={fetchCustomers} />
+                                </div>
+                            </Tooltip>
                             {/* Search bar for customers */}
                             <TextField
                                 label="Search customers"
